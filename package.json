@@ -1,0 +1,29 @@
+{
+  "name": "drive-in",
+  "version": "1.0.0",
+  "description": "Core library for React Drive-In",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ronik-design/drive-in.git"
+  },
+  "keywords": [
+    "bigvideo",
+    "background",
+    "video"
+  ],
+  "author": {
+    "name": "Ronik Design",
+    "email": "contact@ronikdesign.com",
+    "url": "http://www.ronikdesign.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ronik-design/drive-in/issues"
+  },
+  "homepage": "https://github.com/ronik-design/drive-in",
+  "dependencies": {
+    "inherits": "^2.0.1",
+    "jvent": "^0.2.0"
+  }
+}
