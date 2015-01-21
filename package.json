@@ -1,6 +1,6 @@
 {
   "name": "drive-in",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Core library for React Drive-In",
   "main": "index.js",
   "repository": {
