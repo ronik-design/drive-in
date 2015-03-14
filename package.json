@@ -25,5 +25,24 @@
   "dependencies": {
     "inherits": "^2.0.1",
     "jvent": "^0.2.0"
+  },
+  "devDependencies": {
+    "babel": "^4.6.6",
+    "babel-eslint": "^1.0.14",
+    "babelify": "^5.0.4",
+    "browserify": "^9.0.3",
+    "coveralls": "^2.11.2",
+    "eslint": "^0.16.1",
+    "minifyify": "^6.3.2",
+    "mocha": "^2.1.0",
+    "uglify-js": "^2.4.17",
+    "uglifyify": "^3.0.1"
+  },
+  "scripts": {
+    "build": "npm run build-drive-in; npm run build-drive-in-browser; npm run build-drive-in-browser-min;",
+    "build-drive-in": "babel src --out-dir lib",
+    "build-drive-in-browser": "NODE_ENV=production browserify src/index.js -t babelify --outfile dist/drive-in-browser.js --standalone DriveIn",
+    "build-drive-in-browser-min": "NODE_ENV=production browserify src/index.js -t babelify --standalone DriveIn | uglifyjs -mc > dist/drive-in-browser.min.js",
+    "lint": "eslint src"
   }
 }

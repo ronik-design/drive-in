@@ -1,33 +1,31 @@
-"use strict";
-
 function playlistItem(src) {
     var item = {},
         videoExts = {
-        mp4: true,
-        ogv: true,
-        webm: true
-    },
+            mp4: true,
+            ogv: true,
+            webm: true
+        },
         imageExts = {
-        jpg: true,
-        png: true,
-        gif: true
-    };
+            jpg: true,
+            png: true,
+            gif: true
+        };
 
-    var ext = src.replace(/[\?|\#].+/, "").match(/\.([mp4|ogv|webm|jpg|jpeg|png|gif]+)$/)[1];
+    var ext = src.replace(/[\?|\#].+/, '').match(/\.([mp4|ogv|webm|jpg|jpeg|png|gif]+)$/)[1];
 
     if (videoExts[ext]) {
-        if (ext === "ogv") {
-            item.type = "video/ogg";
+        if (ext === 'ogv') {
+            item.type = 'video/ogg';
         } else {
-            item.type = "video/" + ext;
+            item.type = 'video/' + ext;
         }
     }
 
     if (imageExts[ext]) {
-        if (ext === "jpg") {
-            item.type = "image/jpeg";
+        if (ext === 'jpg') {
+            item.type = 'image/jpeg';
         } else {
-            item.type = "image/" + ext;
+            item.type = 'image/' + ext;
         }
     }
 
@@ -52,7 +50,7 @@ function makePlaylist(rawPlaylist, depth) {
             playlist.push(makePlaylist(item, depth + 1));
         }
 
-        if (typeof item === "string") {
+        if (typeof item === 'string') {
             if (depth === 0) {
                 playlist.push([playlistItem(item)]);
             } else {
@@ -64,7 +62,7 @@ function makePlaylist(rawPlaylist, depth) {
     return playlist;
 }
 
-module.exports = {
+export default {
     makePlaylist: makePlaylist,
     makePlaylistItem: playlistItem
 };

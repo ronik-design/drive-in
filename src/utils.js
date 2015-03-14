@@ -1,5 +1,3 @@
-"use strict";
-
 function getWidth() {
     if (self.innerHeight) {
         return self.innerWidth;
@@ -29,15 +27,16 @@ function getHeight() {
 }
 
 function setStyles(el, props) {
-    var cssString = "";
+    var cssString = '';
     for (var p in props) {
-        cssString += p + ":" + props[p] + ";";
+        cssString += p + ':' + props[p] + ';';
     }
-    el.style.cssText += ";" + cssString;
+    el.style.cssText += ';' + cssString;
 }
 
 function findPoster(playlist) {
-    var poster, item;
+    var poster,
+        item;
 
     for (var i in playlist) {
         item = playlist[i];
@@ -89,7 +88,7 @@ function createEl(name, props) {
     return el;
 }
 
-module.exports = {
+export default {
     getWidth: getWidth,
     getHeight: getHeight,
     setStyles: setStyles,

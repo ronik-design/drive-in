@@ -1,3 +1,164 @@
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.DriveIn = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+function Jvent() {}
+
+/**
+ * Adds a listener to the collection for a specified event.
+ * @public
+ * @function
+ * @name Jvent#on
+ * @param {string} event Event name.
+ * @param {function} listener Listener function.
+ * @example
+ * // Will add a event listener to the "ready" event
+ * var startDoingStuff = function (event, param1, param2, ...) {
+ *   // Some code here!
+ * };
+ *
+ * me.on("ready", startDoingStuff);
+ */
+Jvent.prototype.on = function(event, listener) {
+  this._collection = this._collection || {};
+  this._collection[event] = this._collection[event] || [];
+  this._collection[event].push(listener);
+  return this;
+};
+
+/**
+ * Adds a one time listener to the collection for a specified event. It will execute only once.
+ * @public
+ * @function
+ * @name Jvent#once
+ * @param {string} event Event name.
+ * @param {function} listener Listener function.
+ * @returns itself
+ * @example
+ * // Will add a event handler to the "contentLoad" event once
+ * me.once("contentLoad", startDoingStuff);
+ */
+Jvent.prototype.once = function (event, listener) {
+  var that = this;
+
+  function fn() {
+    that.off(event, fn);
+    listener.apply(this, arguments);
+  }
+
+  fn.listener = listener;
+
+  this.on(event, fn);
+
+  return this;
+};
+
+/**
+ * Removes a listener from the collection for a specified event.
+ * @public
+ * @function
+ * @name Jvent#off
+ * @param {string} event Event name.
+ * @param {function} listener Listener function.
+ * @returns itself
+ * @example
+ * // Will remove event handler to the "ready" event
+ * var startDoingStuff = function () {
+ *   // Some code here!
+ * };
+ *
+ * me.off("ready", startDoingStuff);
+ */
+Jvent.prototype.off = function (event, listener) {
+
+  var listeners = this._collection[event],
+      j = 0;
+
+  if (listeners !== undefined) {
+    for (j; j < listeners.length; j += 1) {
+      if (listeners[j] === listener || listeners[j].listener === listener) {
+        listeners.splice(j, 1);
+        break;
+      }
+    }
+  }
+
+  if (listeners.length === 0) {
+    this.removeAllListeners(event);
+  }
+
+  return this;
+};
+
+/**
+ * Removes all listeners from the collection for a specified event.
+ * @public
+ * @function
+ * @name Jvent#removeAllListeners
+ * @param {string} event Event name.
+ * @returns itself
+ * @example
+ * me.removeAllListeners("ready");
+ */
+Jvent.prototype.removeAllListeners = function (event) {
+  this._collection = this._collection || {};
+  delete this._collection[event];
+  return this;
+};
+
+/**
+ * Returns all listeners from the collection for a specified event.
+ * @public
+ * @function
+ * @name Jvent#listeners
+ * @param {string} event Event name.
+ * @returns Array
+ * @example
+ * me.listeners("ready");
+ */
+Jvent.prototype.listeners = function (event) {
+  this._collection = this._collection || {};
+  return this._collection[event];
+};
+
+/**
+ * Execute each item in the listener collection in order with the specified data.
+ * @name Jvent#emit
+ * @public
+ * @protected
+ * @param {string} event The name of the event you want to emit.
+ * @param {...object} var_args Data to pass to the listeners.
+ * @example
+ * // Will emit the "ready" event with "param1" and "param2" as arguments.
+ * me.emit("ready", "param1", "param2");
+ */
+Jvent.prototype.emit = function () {
+  if (this._collection === undefined) {
+    return this;
+  }
+
+  var args = [].slice.call(arguments, 0), // converted to array
+      event = args.shift(),
+      listeners = this._collection[event],
+      i = 0,
+      len;
+
+  if (listeners) {
+    listeners = listeners.slice(0);
+    len = listeners.length;
+    for (i; i < len; i += 1) {
+      listeners[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+/**
+ * Expose
+ */
+module.exports = Jvent;
+
+},{}],2:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -725,3 +886,252 @@ var DriveIn = (function (_Jvent) {
 })(Jvent);
 
 module.exports = DriveIn;
+
+},{"./playlist":3,"./timer":4,"./utils":5,"jvent":1}],3:[function(require,module,exports){
+"use strict";
+
+function playlistItem(src) {
+    var item = {},
+        videoExts = {
+        mp4: true,
+        ogv: true,
+        webm: true
+    },
+        imageExts = {
+        jpg: true,
+        png: true,
+        gif: true
+    };
+
+    var ext = src.replace(/[\?|\#].+/, "").match(/\.([mp4|ogv|webm|jpg|jpeg|png|gif]+)$/)[1];
+
+    if (videoExts[ext]) {
+        if (ext === "ogv") {
+            item.type = "video/ogg";
+        } else {
+            item.type = "video/" + ext;
+        }
+    }
+
+    if (imageExts[ext]) {
+        if (ext === "jpg") {
+            item.type = "image/jpeg";
+        } else {
+            item.type = "image/" + ext;
+        }
+    }
+
+    item.src = src;
+
+    return item;
+}
+
+function makePlaylist(rawPlaylist, depth) {
+    depth = depth || 0;
+
+    var playlist = [],
+        item;
+
+    for (var i in rawPlaylist) {
+        item = rawPlaylist[i];
+        if (item.constructor === Object) {
+            playlist.push([item]);
+        }
+
+        if (item.constructor === Array) {
+            playlist.push(makePlaylist(item, depth + 1));
+        }
+
+        if (typeof item === "string") {
+            if (depth === 0) {
+                playlist.push([playlistItem(item)]);
+            } else {
+                playlist.push(playlistItem(item));
+            }
+        }
+    }
+
+    return playlist;
+}
+
+module.exports = {
+    makePlaylist: makePlaylist,
+    makePlaylistItem: playlistItem
+};
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+var Jvent = _interopRequire(require("jvent"));
+
+var Timer = (function (_Jvent) {
+    function Timer(callback, delay) {
+        _classCallCheck(this, Timer);
+
+        this.callback = callback;
+        this.remaining = delay;
+        this.timerId = null;
+        this.start = null;
+
+        this.resume();
+    }
+
+    _inherits(Timer, _Jvent);
+
+    _createClass(Timer, {
+        pause: {
+            value: function pause(silent) {
+                clearTimeout(timerId);
+                this.remaining -= new Date() - this.start;
+
+                if (!silent) {
+                    this.emit("pause");
+                }
+            }
+        },
+        resume: {
+            value: function resume(silent) {
+                this.start = new Date();
+                clearTimeout(this.timerId);
+                this.timerId = setTimeout(this.callback, this.remaining);
+
+                if (!silent) {
+                    this.emit("resume");
+                }
+            }
+        },
+        currentTime: {
+            value: function currentTime() {
+                var currTime = new Date() - this.start;
+                if (this.timerId) {
+                    this.pause(true);
+                    this.resume(true);
+                }
+                return currTime;
+            }
+        },
+        destroy: {
+            value: function destroy() {
+                this.pause(true);
+                this.removeAllListeners();
+            }
+        }
+    });
+
+    return Timer;
+})(Jvent);
+
+module.exports = Timer;
+
+},{"jvent":1}],5:[function(require,module,exports){
+"use strict";
+
+function getWidth() {
+    if (self.innerHeight) {
+        return self.innerWidth;
+    }
+
+    if (document.documentElement && document.documentElement.clientWidth) {
+        return document.documentElement.clientWidth;
+    }
+
+    if (document.body) {
+        return document.body.clientWidth;
+    }
+}
+
+function getHeight() {
+    if (self.innerHeight) {
+        return self.innerHeight;
+    }
+
+    if (document.documentElement && document.documentElement.clientHeight) {
+        return document.documentElement.clientHeight;
+    }
+
+    if (document.body) {
+        return document.body.clientHeight;
+    }
+}
+
+function setStyles(el, props) {
+    var cssString = "";
+    for (var p in props) {
+        cssString += p + ":" + props[p] + ";";
+    }
+    el.style.cssText += ";" + cssString;
+}
+
+function findPoster(playlist) {
+    var poster, item;
+
+    for (var i in playlist) {
+        item = playlist[i];
+
+        if (item.constructor === Array) {
+            poster = internals.findPoster(item);
+        } else {
+            if (item.type.search(/^image/) > -1) {
+                return item;
+            }
+        }
+
+        if (poster) {
+            return poster;
+        }
+    }
+}
+
+function eachNode(nodes, fn) {
+    [].slice.call(nodes).forEach(fn);
+}
+
+function replaceChildren(el, newChildren) {
+    var children = el.children || el.childNodes;
+
+    if (children.length) {
+        internals.eachNode(children, function (childEl) {
+            var newChild = newChildren.shift();
+            if (newChild) {
+                el.replaceChild(newChild, childEl);
+            } else {
+                el.removeChild(childEl);
+            }
+        });
+    }
+
+    if (newChildren.length) {
+        newChildren.forEach(function (newChild) {
+            el.appendChild(newChild);
+        });
+    }
+}
+
+function createEl(name, props) {
+    var el = document.createElement(name);
+    for (var prop in props) {
+        el[prop] = props[prop];
+    }
+    return el;
+}
+
+module.exports = {
+    getWidth: getWidth,
+    getHeight: getHeight,
+    setStyles: setStyles,
+    findPoster: findPoster,
+    eachNode: eachNode,
+    replaceChildren: replaceChildren,
+    createEl: createEl
+};
+
+},{}]},{},[2])(2)
+});
