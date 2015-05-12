@@ -765,7 +765,11 @@ var DriveIn = (function (_Jvent) {
                 var playlist = Playlist.makePlaylist(rawPlaylist);
 
                 if (options.poster) {
-                    this.poster = options.poster;
+                    if (typeof options.poster === "string") {
+                        this.poster = { src: options.poster };
+                    } else {
+                        this.poster = options.poster;
+                    }
                 } else {
                     this.poster = findPoster(playlist);
                 }
