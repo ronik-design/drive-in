@@ -1,6 +1,6 @@
 {
   "name": "drive-in",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Core library for React Drive-In",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/ronik-design/drive-in",
   "dependencies": {
-    "inherits": "^2.0.1",
     "jvent": "^0.2.0"
   },
   "devDependencies": {
@@ -33,9 +32,6 @@
     "browserify": "^9.0.3",
     "coveralls": "^2.11.2",
     "eslint": "^0.16.1",
-    "minifyify": "^6.3.2",
-    "mocha": "^2.1.0",
-    "uglify-js": "^2.4.17",
     "uglifyify": "^3.0.1"
   },
   "scripts": {
