@@ -11,6 +11,7 @@ var getWidth = Utils.getWidth,
     replaceChildren = Utils.replaceChildren;
 
 class DriveIn extends Jvent {
+
     constructor() {
         this._listeners = [];
 
@@ -509,32 +510,11 @@ class DriveIn extends Jvent {
         }
     }
 
-    _prepareContainer() {
-        var containerH = getHeight();
-
-        if (document.body.offsetHeight < containerH) {
-            setStyles(document.body, {
-                height: 'auto'
-            });
-
-            if (containerH > document.body.offsetHeight) {
-                setStyles(document.body, {
-                    height: '100%'
-                });
-                setStyles(document.documentElement, {
-                    height: '100%'
-                });
-            }
-        }
-    }
-
     init(options) {
         options = options || {};
 
         this.isTouch = options.isTouch !== undefined ?
             options.isTouch : 'ontouchstart' in window || !!options.slideshow;
-
-        this._prepareContainer();
 
         this.parentEl = this._setParent(options.el);
         var mediaEl = this._createMediaEl();
