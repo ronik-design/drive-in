@@ -514,7 +514,9 @@ class DriveIn extends Jvent {
         options = options || {};
 
         this.isTouch = options.isTouch !== undefined ?
-            options.isTouch : 'ontouchstart' in window || !!options.slideshow;
+            options.isTouch : 'ontouchstart' in window;
+
+        this.slideshow = options.slideshow;
 
         this.parentEl = this._setParent(options.el);
         var mediaEl = this._createMediaEl();

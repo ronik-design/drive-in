@@ -1,6 +1,6 @@
 {
   "name": "drive-in",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Core library for React Drive-In",
   "main": "index.js",
   "repository": {
@@ -35,6 +35,7 @@
     "uglifyify": "^3.0.1"
   },
   "scripts": {
+    "prepublish": "npm run build",
     "build": "npm run build-drive-in; npm run build-drive-in-browser; npm run build-drive-in-browser-min;",
     "build-drive-in": "babel src --out-dir lib",
     "build-drive-in-browser": "NODE_ENV=production browserify src/index.js -t babelify --outfile dist/drive-in-browser.js --standalone DriveIn",

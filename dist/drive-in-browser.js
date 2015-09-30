@@ -698,7 +698,9 @@ var DriveIn = (function (_Jvent) {
             value: function init(options) {
                 options = options || {};
 
-                this.isTouch = options.isTouch !== undefined ? options.isTouch : "ontouchstart" in window || !!options.slideshow;
+                this.isTouch = options.isTouch !== undefined ? options.isTouch : "ontouchstart" in window;
+
+                this.slideshow = options.slideshow;
 
                 this.parentEl = this._setParent(options.el);
                 var mediaEl = this._createMediaEl();
@@ -969,7 +971,7 @@ var Timer = (function (_Jvent) {
     _createClass(Timer, {
         pause: {
             value: function pause(silent) {
-                clearTimeout(timerId);
+                clearTimeout(this.timerId);
                 this.remaining -= new Date() - this.start;
 
                 if (!silent) {

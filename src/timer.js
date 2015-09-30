@@ -12,7 +12,7 @@ class Timer extends Jvent {
     }
 
     pause(silent) {
-        clearTimeout(timerId);
+        clearTimeout(this.timerId);
         this.remaining -= new Date() - this.start;
 
         if (!silent) {
