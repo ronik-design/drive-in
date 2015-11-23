@@ -345,6 +345,7 @@ var DriveIn = (function (_Jvent) {
     _this.loop = true;
     _this.loopPlaylistItems = false;
     _this.slideshow = false;
+    _this.startPaused = false;
 
     _this.playlistLength = 0;
     _this.currentItem = 0;
@@ -707,7 +708,11 @@ var DriveIn = (function (_Jvent) {
 
       var onCanPlay = function onCanPlay() {
         _this2.emit("media.canplay");
-        mediaEl.play();
+
+        if (!_this2.startPaused) {
+          mediaEl.play();
+        }
+
         if (_this2._seeking) {
           _this2._seeking = false;
         }
@@ -753,6 +758,10 @@ var DriveIn = (function (_Jvent) {
           }
 
           _this3._slideshowTimer = new Timer(ended, _this3.slideshowItemDuration * 1000);
+
+          if (_this3.startPaused) {
+            _this3._slideshowTimer.pause();
+          }
 
           _this3._slideshowTimer.on("pause", onPause);
         }
@@ -922,6 +931,8 @@ var DriveIn = (function (_Jvent) {
       this.isTouch = options.isTouch !== undefined ? options.isTouch : "ontouchstart" in window;
 
       this.slideshow = options.slideshow;
+
+      this.startPaused = options.startPaused;
 
       this.parentEl = this._setParent(options.el);
 
