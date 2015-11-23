@@ -1,8 +1,14 @@
 {
   "name": "drive-in",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Core library for React Drive-In",
-  "main": "index.js",
+  "main": "dist/drive-in.js",
+  "jsnext:main": "lib/index.js",
+  "scripts": {
+    "build": "mkdir -p dist && node rollup.js",
+    "test": "eslint lib",
+    "prepublish": "npm test && npm run build"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ronik-design/drive-in.git"
@@ -22,24 +28,21 @@
     "url": "https://github.com/ronik-design/drive-in/issues"
   },
   "homepage": "https://github.com/ronik-design/drive-in",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "dependencies": {
     "jvent": "^0.2.0"
   },
   "devDependencies": {
-    "babel": "^4.6.6",
-    "babel-eslint": "^1.0.14",
-    "babelify": "^5.0.4",
-    "browserify": "^9.0.3",
-    "coveralls": "^2.11.2",
-    "eslint": "^0.16.1",
-    "uglifyify": "^3.0.1"
-  },
-  "scripts": {
-    "prepublish": "npm run build",
-    "build": "npm run build-drive-in; npm run build-drive-in-browser; npm run build-drive-in-browser-min;",
-    "build-drive-in": "babel src --out-dir lib",
-    "build-drive-in-browser": "NODE_ENV=production browserify src/index.js -t babelify --outfile dist/drive-in-browser.js --standalone DriveIn",
-    "build-drive-in-browser-min": "NODE_ENV=production browserify src/index.js -t babelify --standalone DriveIn | uglifyjs -mc > dist/drive-in-browser.min.js",
-    "lint": "eslint src"
+    "babel": "^6.1.18",
+    "babel-cli": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-es2015-rollup": "^1.0.0",
+    "eslint": "^1.7.3",
+    "eslint-config-defaults": "^7.0.1",
+    "eslint-plugin-filenames": "^0.2.0",
+    "rollup": "^0.21.0",
+    "rollup-plugin-babel": "^2.1.0"
   }
 }
