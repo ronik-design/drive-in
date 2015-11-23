@@ -1,11 +1,11 @@
 {
   "name": "drive-in",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Core library for React Drive-In",
   "main": "dist/drive-in.js",
   "jsnext:main": "lib/index.js",
   "scripts": {
-    "build": "mkdir -p dist && node rollup.js",
+    "build": "mkdir -p dist && rollup -c",
     "test": "eslint lib",
     "prepublish": "npm test && npm run build"
   },

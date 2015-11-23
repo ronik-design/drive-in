@@ -621,8 +621,29 @@ var DriveIn = (function (_Jvent) {
       var listeners = this._listeners;
       var listen = undefined;
 
-      for (listen in listeners) {
-        listen.element.removeEventListener(listen.event, listen.handler);
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = listeners[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          listen = _step3.value;
+
+          listen.element.removeEventListener(listen.event, listen.handler);
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
       }
     }
   }, {
@@ -719,7 +740,7 @@ var DriveIn = (function (_Jvent) {
 
         _this3._setImageData(_this3);
         _this3.emit("media.metadata", _this3);
-        _this3.emit("media.playing", self.currentItem);
+        _this3.emit("media.playing", _this3.currentItem);
 
         if (_this3.isTouch) {
           return;
