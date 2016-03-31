@@ -11,7 +11,7 @@ babelHelpers.classCallCheck = function (instance, Constructor) {
   }
 };
 
-babelHelpers.createClass = (function () {
+babelHelpers.createClass = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -27,7 +27,7 @@ babelHelpers.createClass = (function () {
     if (staticProps) defineProperties(Constructor, staticProps);
     return Constructor;
   };
-})();
+}();
 
 babelHelpers.inherits = function (subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
@@ -54,6 +54,7 @@ babelHelpers.possibleConstructorReturn = function (self, call) {
 };
 
 babelHelpers;
+
 var eachNode = function eachNode(nodes, fn) {
   [].slice.call(nodes).forEach(fn);
 };
@@ -91,7 +92,7 @@ var getHeight = function getHeight() {
 var setStyles = function setStyles(el, props) {
 
   var cssString = "";
-  var p = undefined;
+  var p = void 0;
 
   for (p in props) {
     cssString += p + ":" + props[p] + ";";
@@ -102,8 +103,8 @@ var setStyles = function setStyles(el, props) {
 
 var findPoster = function findPoster(playlist) {
 
-  var poster = undefined;
-  var item = undefined;
+  var poster = void 0;
+  var item = void 0;
 
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
@@ -164,7 +165,7 @@ var replaceChildren = function replaceChildren(el, newChildren) {
 var createEl = function createEl(name, props) {
 
   var el = document.createElement(name);
-  var prop = undefined;
+  var prop = void 0;
 
   for (prop in props) {
     el[prop] = props[prop];
@@ -176,7 +177,8 @@ var createEl = function createEl(name, props) {
 var VIDEO_EXTS = {
   mp4: true,
   ogv: true,
-  webm: true
+  webm: true,
+  m3u8: true
 };
 
 var IMAGE_EXTS = {
@@ -185,7 +187,7 @@ var IMAGE_EXTS = {
   gif: true
 };
 
-var EXT_RE = /\.([mp4|ogv|webm|jpg|jpeg|png|gif]+)$/;
+var EXT_RE = /\.([mp4|ogv|webm|m3u8|jpg|jpeg|png|gif]+)$/;
 
 var makePlaylistItem = function makePlaylistItem(src) {
 
@@ -196,6 +198,8 @@ var makePlaylistItem = function makePlaylistItem(src) {
   if (VIDEO_EXTS[ext]) {
     if (ext === "ogv") {
       item.type = "video/ogg";
+    } else if (ext === "m3u8") {
+      item.type = "video/mp4";
     } else {
       item.type = "video/" + ext;
     }
@@ -215,9 +219,10 @@ var makePlaylistItem = function makePlaylistItem(src) {
 var makePlaylist = function makePlaylist(rawPlaylist) {
   var depth = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
+
   var playlist = [];
 
-  var item = undefined;
+  var item = void 0;
 
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
@@ -226,6 +231,7 @@ var makePlaylist = function makePlaylist(rawPlaylist) {
   try {
     for (var _iterator = rawPlaylist[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       item = _step.value;
+
 
       if (item.constructor === Object) {
         playlist.push([item]);
@@ -266,7 +272,7 @@ var Playlist = {
   makePlaylistItem: makePlaylistItem
 };
 
-var Timer = (function (_Jvent) {
+var Timer = function (_Jvent) {
   babelHelpers.inherits(Timer, _Jvent);
 
   function Timer(callback, delay) {
@@ -322,9 +328,9 @@ var Timer = (function (_Jvent) {
     }
   }]);
   return Timer;
-})(Jvent);
+}(Jvent);
 
-var DriveIn = (function (_Jvent) {
+var DriveIn = function (_Jvent) {
   babelHelpers.inherits(DriveIn, _Jvent);
 
   function DriveIn() {
@@ -463,10 +469,10 @@ var DriveIn = (function (_Jvent) {
 
       var mediaEl = this.mediaEl;
       var sourceEls = [];
-      var source = undefined;
-      var sourceEl = undefined;
-      var posterSrc = undefined;
-      var canPlayType = undefined;
+      var source = void 0;
+      var sourceEl = void 0;
+      var posterSrc = void 0;
+      var canPlayType = void 0;
 
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
@@ -527,8 +533,8 @@ var DriveIn = (function (_Jvent) {
   }, {
     key: "_playImageItem",
     value: function _playImageItem(item, itemNum) {
-      var source = undefined;
-      var src = undefined;
+      var source = void 0;
+      var src = void 0;
 
       if (item && item.length) {
         var _iteratorNormalCompletion2 = true;
@@ -620,7 +626,7 @@ var DriveIn = (function (_Jvent) {
     key: "_removeAllListeners",
     value: function _removeAllListeners() {
       var listeners = this._listeners;
-      var listen = undefined;
+      var listen = void 0;
 
       var _iteratorNormalCompletion3 = true;
       var _didIteratorError3 = false;
@@ -885,7 +891,7 @@ var DriveIn = (function (_Jvent) {
   }, {
     key: "_createMediaEl",
     value: function _createMediaEl() {
-      var mediaEl = undefined;
+      var mediaEl = void 0;
 
       if (this.mediaEl) {
         this._cleanup();
@@ -927,6 +933,7 @@ var DriveIn = (function (_Jvent) {
     key: "init",
     value: function init() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
 
       this.isTouch = options.isTouch !== undefined ? options.isTouch : "ontouchstart" in window;
 
@@ -1093,6 +1100,6 @@ var DriveIn = (function (_Jvent) {
     }
   }]);
   return DriveIn;
-})(Jvent);
+}(Jvent);
 
 module.exports = DriveIn;
